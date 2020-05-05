@@ -13,24 +13,11 @@ struct digit * readNumber();
 struct digit *searchNumber(struct digit *start, int number);
 struct digit *reverseNumber(struct digit * start);
 struct digit * insertAtFront(struct digit *start, struct digit *newptr);
+struct digit *sortList(struct digit* head);
 int main(void) {
-  struct digit *start, *found, *backwards;
+  struct digit *start, *found, *backwards, *sorted;
   int searchNum = 5;
   printf("Please enter a number: ");
-  // int num, i, entry;
-  // printf("How many digits do you want to save? \n");
-  // scanf("%d", &num);
-  // for(i = 0; i < num; i++) {
-  //   printf("Enter your %d digit:", i);
-  //   scanf("%d", &entry);
-  //   if(i == 0) {
-  //     start = createDigit(entry);
-  //     end = start;
-  //   } else {
-  //     newDigitPtr = createDigit(entry);
-  //     end = append(end, newDigitPtr);
-  //   }
-  // }
   start = readNumber();
   printDigits(start);
   found = searchNumber(start, searchNum);
@@ -41,7 +28,12 @@ int main(void) {
   }
   backwards = reverseNumber(start);
   printDigits(backwards);
+
+  sorted = sortList(start);
+  printf("Sorted list:\n");
+  printDigits(sorted);
   freeDigit(start);
+  printDigits(start);
   return 0;
 }
 
@@ -105,7 +97,7 @@ struct digit *searchNumber(struct digit *start, int number) {
 
 struct digit *reverseNumber(struct digit * start) {
   struct digit *ptr = start;
-  struct digit *bstart;
+  struct digit *bstart = NULL;
   struct digit *newDigit;
   if(start != NULL) {
     bstart = createDigit(start -> num);
@@ -122,4 +114,35 @@ struct digit *reverseNumber(struct digit * start) {
 struct digit * insertAtFront(struct digit *start, struct digit *newptr) {
   newptr->next = start;
   return (newptr);
+}
+struct digit *insertIntoSorted(struct digit *start, struct digit *newDig) {
+  struct digit *ptr = start;
+  struct digit *prev = NULL;
+  while(ptr != NULL && (ptr -> num < newDig ->num)) {
+    prev = ptr;
+    ptr = ptr ->next;
+  }
+  if (prev == NULL) {
+    start = insertAtFront(start, newDig);
+  } else {
+    prev ->next = newDig;
+    newDig ->next = ptr;
+  }
+  return (start);
+}
+struct digit *sortList(struct digit* start) {
+  struct digit * temp = start;
+  struct digit *sortedStart = NULL;
+  struct digit *newdigit;
+  if(start != NULL) {
+    sortedStart = createDigit(start ->num);
+    temp = temp ->next;
+  }
+
+  while(temp != NULL) {
+    newdigit = createDigit(temp ->num);
+    sortedStart =  insertIntoSorted(sortedStart, newdigit);
+    temp = temp ->next;
+  }
+  return (sortedStart);
 }
