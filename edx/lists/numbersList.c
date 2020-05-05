@@ -14,6 +14,7 @@ struct digit *searchNumber(struct digit *start, int number);
 struct digit *reverseNumber(struct digit * start);
 struct digit * insertAtFront(struct digit *start, struct digit *newptr);
 struct digit *sortList(struct digit* head);
+int printRedundancies(struct digit *start);
 int main(void) {
   struct digit *start, *found, *backwards, *sorted;
   int searchNum = 5;
@@ -32,8 +33,9 @@ int main(void) {
   sorted = sortList(start);
   printf("Sorted list:\n");
   printDigits(sorted);
-  freeDigit(start);
   printDigits(start);
+  printf("Redundancy of digits: %d\n", printRedundancies(start));
+  freeDigit(start);
   return 0;
 }
 
@@ -145,4 +147,20 @@ struct digit *sortList(struct digit* start) {
     temp = temp ->next;
   }
   return (sortedStart);
+}
+
+int printRedundancies(struct digit *start) {
+  struct digit *sorted = sortList(start);
+  struct digit *ptr = sorted;
+  int redundancies = 0;
+  int previous = -1;
+  while (ptr != NULL) {
+    if(ptr->num == previous)
+      redundancies++;
+    else
+      previous = ptr->num;
+    ptr = ptr->next;
+  }
+  freeDigit(sorted);
+  return redundancies;
 }
