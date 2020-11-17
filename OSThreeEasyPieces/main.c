@@ -35,3 +35,4 @@ int main(int argc, char *argv[])
 }
 
 //gcc -o main main.c -Wall -pthread; ./main
+// every time we run the ./main function we get a different result of the counter, this brings us to the problem of uncontrolled scheduling
